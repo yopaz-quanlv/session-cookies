@@ -1,0 +1,105 @@
+\documentclass{beamer}
+\usetheme{Madrid} % hoặc thử các theme khác như: Berlin, Warsaw, CambridgeUS
+
+\title{Session và Cookies trong Web Development}
+\author{Nguyen Khai}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% --- Slide: Tổng quan ---
+\begin{frame}{Tổng quan}
+  \begin{itemize}
+    \item Web hoạt động theo mô hình stateless – mỗi request là độc lập.
+    \item Để duy trì thông tin người dùng giữa các request, ta dùng:
+    \begin{itemize}
+      \item \textbf{Cookies}
+      \item \textbf{Sessions}
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+% --- Slide: Cookies là gì ---
+\begin{frame}{Cookies là gì?}
+  \begin{itemize}
+    \item Là dữ liệu nhỏ được lưu trên trình duyệt người dùng.
+    \item Mỗi lần gửi request, cookies sẽ được gửi kèm theo.
+    \item Dùng để lưu: thông tin đăng nhập, tùy chọn ngôn ngữ, token, v.v.
+  \end{itemize}
+\end{frame}
+
+% --- Slide: Session là gì ---
+\begin{frame}{Session là gì?}
+  \begin{itemize}
+    \item Là bộ nhớ lưu trữ thông tin người dùng trên server.
+    \item Khi user đăng nhập, server tạo một session và gắn session ID.
+    \item Session ID thường được lưu dưới dạng cookie.
+    \item Dùng để lưu: user ID, role, giỏ hàng, trạng thái đăng nhập, v.v.
+  \end{itemize}
+\end{frame}
+
+% --- Slide: So sánh ---
+\begin{frame}{So sánh Session và Cookies}
+  \begin{tabular}{|l|l|l|}
+    \hline
+    \textbf{Tiêu chí} & \textbf{Cookies} & \textbf{Sessions} \\
+    \hline
+    Lưu trữ & Trình duyệt (client) & Server \\
+    \hline
+    Dung lượng & ~4KB & Tuỳ ý (RAM/DB) \\
+    \hline
+    Bảo mật & Kém hơn & Bảo mật hơn \\
+    \hline
+    Thời gian sống & Có thể rất lâu & Thường ngắn, timeout \\
+    \hline
+  \end{tabular}
+\end{frame}
+
+% --- Slide: Minh họa ---
+\begin{frame}{Minh họa hoạt động}
+  \begin{enumerate}
+    \item User truy cập website → Gửi request đến server.
+    \item Server tạo session → lưu user info → gửi session ID về trình duyệt.
+    \item Trình duyệt lưu session ID trong cookie.
+    \item Các lần request sau → gửi lại cookie → server tra session.
+  \end{enumerate}
+\end{frame}
+
+% --- Slide: Ứng dụng ---
+\begin{frame}{Ứng dụng thực tế}
+  \begin{itemize}
+    \item Xây dựng hệ thống đăng nhập người dùng.
+    \item Giỏ hàng thương mại điện tử.
+    \item Ghi nhớ tùy chọn người dùng (theme, ngôn ngữ).
+  \end{itemize}
+\end{frame}
+
+% --- Slide: Lưu ý bảo mật ---
+\begin{frame}{Lưu ý bảo mật}
+  \begin{itemize}
+    \item Cookies dễ bị đánh cắp qua XSS → nên mã hóa token.
+    \item Nên dùng HTTPS để truyền dữ liệu.
+    \item Session nên có timeout để tránh lạm dụng.
+    \item Xóa session/cookie khi logout.
+  \end{itemize}
+\end{frame}
+
+% --- Slide: Kết luận ---
+\begin{frame}{Kết luận}
+  \begin{itemize}
+    \item Cookies và Sessions giúp duy trì trạng thái người dùng.
+    \item Cần chọn cơ chế phù hợp và đảm bảo bảo mật.
+    \item Kết hợp cả hai để đạt hiệu quả cao nhất.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \centering
+  \Huge Cảm ơn!
+\end{frame}
+
+\end{document}
