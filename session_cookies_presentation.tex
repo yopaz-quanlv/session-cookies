@@ -40,14 +40,15 @@
 
 \begin{frame}{Sự ra đời của Cookie}
   \begin{itemize}
-    \item \textbf{1994} – Lou Montulli (Netscape) đề xuất Cookie
-    \item Cho phép lưu dữ liệu nhỏ trên trình duyệt
-    \item Cách hoạt động:
-    \begin{enumerate}
-      \item Server gửi \texttt{Set-Cookie}
-      \item Trình duyệt lưu và gửi lại cookie trong các request tiếp theo
-    \end{enumerate}
-    \item Nhờ đó: server có thể ``nhớ'' user
+    \item \textbf{1994} – Lou Montulli (kỹ sư tại Netscape) đề xuất cơ chế Cookie
+    \item Mục tiêu: giải quyết việc lưu trạng thái người dùng trong giao thức HTTP (vốn stateless)
+    \item Cookie cho phép lưu một lượng nhỏ dữ liệu trên trình duyệt:
+    \begin{itemize}
+      \item ID người dùng
+      \item Tuỳ chọn ngôn ngữ, giao diện
+      \item Phiên đăng nhập
+    \end{itemize}
+    \item Sau này được chuẩn hóa trong \textbf{RFC 2109} (1997) → \textbf{RFC 6265} (2011)
   \end{itemize}
 \end{frame}
 
@@ -78,6 +79,7 @@
 
 \begin{frame}{Giải pháp ra đời: Session!}
   \begin{itemize}
+    \item Session bắt đầu xuất hiện và được chuẩn hoá khoảng từ năm 1996–1997
     \item Session lưu thông tin trên server, chỉ gửi ID cho client
     \item Cookie chỉ chứa \texttt{session\_id}, không chứa thông tin quan trọng
     \item Người dùng không thể sửa dữ liệu session vì nó nằm trên server
