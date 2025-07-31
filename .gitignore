@@ -1,0 +1,30 @@
+# LaTeX temporary files
+*.aux
+*.log
+*.out
+*.toc
+*.bbl
+*.blg
+*.brf
+*.lof
+*.lot
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.nav
+*.snm
+*.vrb
+*.xdv
+
+# Nếu dùng TeXShop hoặc các IDE khác
+*.pdfsync
+*.synctex.gz(busy)
+
+# Nếu dùng VSCode với LaTeX Workshop
+*.acn
+*.acr
+*.alg
+*.glg
+*.glo
+*.gls
+*.ist

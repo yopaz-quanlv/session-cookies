@@ -1,8 +1,11 @@
-\documentclass{beamer}
-\usetheme{Madrid} % hoặc thử các theme khác như: Berlin, Warsaw, CambridgeUS
+\documentclass[aspectratio=169]{beamer}
+\usetheme{CambridgeUS}
+\usepackage[utf8]{inputenc}
+\usepackage[vietnamese]{babel}
+\usepackage{graphicx}
 
-\title{Session và Cookies trong Web Development}
-\author{Nguyen Khai}
+\title{Session \& Cookie\\Bạn đã thật sự hiểu?}
+\author{Lê Văn Quân}
 \date{\today}
 
 \begin{document}
@@ -11,95 +14,158 @@
   \titlepage
 \end{frame}
 
-% --- Slide: Tổng quan ---
-\begin{frame}{Tổng quan}
+\begin{frame}{Mở đầu câu chuyện}
   \begin{itemize}
-    \item Web hoạt động theo mô hình stateless – mỗi request là độc lập.
-    \item Để duy trì thông tin người dùng giữa các request, ta dùng:
+    \item Ngày xưa, khi chưa có cookie hay session
+    \item Server không thể phân biệt được người dùng nào đang truy cập.
+    \item Lý do:
     \begin{itemize}
-      \item \textbf{Cookies}
-      \item \textbf{Sessions}
+        \item HTTP là giao thức \textbf{stateless}
+        \item Mỗi request độc lập, không ``nhớ'' request trước.
     \end{itemize}
   \end{itemize}
 \end{frame}
 
-% --- Slide: Cookies là gì ---
-\begin{frame}{Cookies là gì?}
+\begin{frame}{Khi không có cookie/session, server làm gì?}
+  \begin{enumerate}
+    \item Gắn ID vào URL (URL rewriting):\\
+    \texttt{/profile?user\_id=123}
+    \item Dùng hidden field trong form:\\
+    \texttt{<input type="hidden" value="123" name="user\_id">}
+    \item Theo dõi địa chỉ IP
+  \end{enumerate}
+  \vspace{1em}
+  \textbf{Nhược điểm:} không bảo mật, dễ giả mạo, không tiện lợi
+\end{frame}
+
+\begin{frame}{Sự ra đời của Cookie}
   \begin{itemize}
-    \item Là dữ liệu nhỏ được lưu trên trình duyệt người dùng.
-    \item Mỗi lần gửi request, cookies sẽ được gửi kèm theo.
-    \item Dùng để lưu: thông tin đăng nhập, tùy chọn ngôn ngữ, token, v.v.
+    \item \textbf{1994} – Lou Montulli (Netscape) đề xuất Cookie
+    \item Cho phép lưu dữ liệu nhỏ trên trình duyệt
+    \item Cách hoạt động:
+    \begin{enumerate}
+      \item Server gửi \texttt{Set-Cookie}
+      \item Trình duyệt lưu và gửi lại cookie trong các request tiếp theo
+    \end{enumerate}
+    \item Nhờ đó: server có thể ``nhớ'' user
   \end{itemize}
 \end{frame}
 
-% --- Slide: Session là gì ---
-\begin{frame}{Session là gì?}
+\begin{frame}{Sự ra đời của Cookie}
+  \textbf{Cách hoạt động:}
+  \begin{enumerate}
+    \item Server gửi header: \texttt{Set-Cookie: user\_id=12345}
+    \item Trình duyệt lưu cookie vào máy
+    \item Trong các request sau, trình duyệt gửi: \texttt{Cookie: user\_id=12345}
+  \end{enumerate}
+
+  \vspace{0.5em}
+  \textbf{Nhờ vậy:} Server có thể nhận biết user trong mỗi request
+\end{frame}
+
+\begin{frame}{Vấn đề bảo mật với Cookie}
   \begin{itemize}
-    \item Là bộ nhớ lưu trữ thông tin người dùng trên server.
-    \item Khi user đăng nhập, server tạo một session và gắn session ID.
-    \item Session ID thường được lưu dưới dạng cookie.
-    \item Dùng để lưu: user ID, role, giỏ hàng, trạng thái đăng nhập, v.v.
+    \item Cookie được lưu phía người dùng → người dùng có thể sửa!
+    \item Ví dụ: \texttt{user\_id=12345} tự đổi thành \texttt{user\_id=1}
+    \item Khi đó, người dùng có thể mạo danh người khác nếu server không kiểm tra cẩn thận
+    \item Ngoài ra:
+    \begin{itemize}
+      \item Cookie có thể bị đánh cắp qua XSS
+      \item Cookie gửi kèm mọi request → rò rỉ thông tin
+    \end{itemize}
   \end{itemize}
 \end{frame}
 
-% --- Slide: So sánh ---
-\begin{frame}{So sánh Session và Cookies}
-  \begin{tabular}{|l|l|l|}
+\begin{frame}{Giải pháp ra đời: Session!}
+  \begin{itemize}
+    \item Session lưu thông tin trên server, chỉ gửi ID cho client
+    \item Cookie chỉ chứa \texttt{session\_id}, không chứa thông tin quan trọng
+    \item Người dùng không thể sửa dữ liệu session vì nó nằm trên server
+    \item Nhờ đó: bảo mật tốt hơn, tránh mạo danh và can thiệp
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Tình huống thực tế 🤔}
+\begin{itemize}
+  \item Trên một trang web xem phim
+  \item Tôi là tài khoản \textbf{free}, còn bạn là \textbf{premium}
+  \item Tôi lấy được \texttt{cookie} của bạn (auth\_token, session\_id, v.v.)
+  \item Tôi gán vào trình duyệt của mình và... \textbf{truy cập được phim premium!}
+\end{itemize}
+
+\vspace{1em}
+\alert{Câu hỏi:} Liệu chỉ dùng session là đủ để ngăn chặn?
+\end{frame}
+
+\begin{frame}{Chỉ dùng Session liệu có đủ?}
+\begin{itemize}
+  \item Session lưu trên server – tốt hơn cookie thuần tuý
+  \item Nhưng: session\_id vẫn gửi qua cookie → \textbf{có thể bị đánh cắp}
+  \item Nếu attacker gán session\_id vào trình duyệt họ → Server vẫn tin tưởng!
+\end{itemize}
+
+\vspace{1em}
+\textbf{Kết luận:} Session là cần thiết, nhưng \alert{không đủ} để ngăn giả mạo!
+\end{frame}
+
+\begin{frame}{Giải pháp chống giả mạo session}
+\begin{itemize}
+  \item 🔒 Ràng buộc session với:
+  \begin{itemize}
+    \item Địa chỉ IP gốc
+    \item Trình duyệt (User-Agent)
+    \item Device fingerprint (nếu cần)
+  \end{itemize}
+
+  \item ⏳ Hạn chế thời gian sống của session
+  \item 🔁 Sử dụng access token ngắn hạn + refresh token dài hạn
+  \item ✅ Luôn kiểm tra quyền truy cập phía server có được phép xem phim không, trước khi gửi file video về cho trình duyệt
+\end{itemize}
+\end{frame}
+
+\begin{frame}{So sánh nhanh Cookie vs Session}
+  \begin{tabular}{|l|c|c|}
     \hline
-    \textbf{Tiêu chí} & \textbf{Cookies} & \textbf{Sessions} \\
+    \textbf{Tiêu chí} & \textbf{Cookie} & \textbf{Session} \\
     \hline
-    Lưu trữ & Trình duyệt (client) & Server \\
+    Lưu ở đâu         & Trình duyệt     & Server \\
     \hline
-    Dung lượng & ~4KB & Tuỳ ý (RAM/DB) \\
+    Bảo mật           & Thấp            & Cao \\
     \hline
-    Bảo mật & Kém hơn & Bảo mật hơn \\
+    Dung lượng        & \textasciitilde 4KB & Tuỳ server \\
     \hline
-    Thời gian sống & Có thể rất lâu & Thường ngắn, timeout \\
+    Thời gian sống    & Tuỳ cài đặt     & Tuỳ cấu hình \\
     \hline
   \end{tabular}
 \end{frame}
 
-% --- Slide: Minh họa ---
-\begin{frame}{Minh họa hoạt động}
-  \begin{enumerate}
-    \item User truy cập website → Gửi request đến server.
-    \item Server tạo session → lưu user info → gửi session ID về trình duyệt.
-    \item Trình duyệt lưu session ID trong cookie.
-    \item Các lần request sau → gửi lại cookie → server tra session.
-  \end{enumerate}
-\end{frame}
-
-% --- Slide: Ứng dụng ---
-\begin{frame}{Ứng dụng thực tế}
+\begin{frame}{Ứng dụng của Cookie}
   \begin{itemize}
-    \item Xây dựng hệ thống đăng nhập người dùng.
-    \item Giỏ hàng thương mại điện tử.
-    \item Ghi nhớ tùy chọn người dùng (theme, ngôn ngữ).
+    \item \textbf{Lưu tùy chọn người dùng}: Theme (tối/sáng), ngôn ngữ, layout cá nhân
+    \item \textbf{Theo dõi giỏ hàng tạm thời}: Lưu ID sản phẩm trước khi người dùng đăng nhập
+    \item \textbf{Theo dõi hành vi người dùng}: Dùng bởi Google Analytics, Facebook Pixel, v.v.
+    \item \textbf{Ghi nhớ đăng nhập (Remember me)}: Duy trì trạng thái đăng nhập qua nhiều lần truy cập
+    \item \textbf{Quản lý popup/thông báo}: Ghi nhớ người dùng đã tắt thông báo, không hiển thị lại
+    \item \textbf{A/B Testing}: Gán user vào nhóm A hoặc B để thử nghiệm giao diện
   \end{itemize}
 \end{frame}
 
-% --- Slide: Lưu ý bảo mật ---
-\begin{frame}{Lưu ý bảo mật}
+\begin{frame}{Ứng dụng của Session}
   \begin{itemize}
-    \item Cookies dễ bị đánh cắp qua XSS → nên mã hóa token.
-    \item Nên dùng HTTPS để truyền dữ liệu.
-    \item Session nên có timeout để tránh lạm dụng.
-    \item Xóa session/cookie khi logout.
+    \item \textbf{Giỏ hàng trong e-commerce}: Lưu thông tin sản phẩm, số lượng theo session
+    \item \textbf{Tạm lưu dữ liệu form}: Tránh mất dữ liệu nếu submit lỗi
+    \item \textbf{Chống gửi form nhiều lần}: Xác thực token chống CSRF
+    \item \textbf{Theo dõi user đang hoạt động}: Hiển thị trạng thái “online” trong hệ thống
+    \item \textbf{Lưu vị trí điều hướng trước đó}: Redirect về trang trước sau khi đăng nhập
+    \item \textbf{Lưu tiến trình thao tác}: Như trong các bước đăng ký nhiều bước (multi-step form)
   \end{itemize}
 \end{frame}
 
-% --- Slide: Kết luận ---
 \begin{frame}{Kết luận}
   \begin{itemize}
-    \item Cookies và Sessions giúp duy trì trạng thái người dùng.
-    \item Cần chọn cơ chế phù hợp và đảm bảo bảo mật.
-    \item Kết hợp cả hai để đạt hiệu quả cao nhất.
+    \item Cookie \& Session là nền tảng cho mọi website hiện đại
+    \item Từ chỗ ``không thể nhớ ai'' → Web cá nhân hóa, bảo mật hơn
+    \item Giúp trải nghiệm người dùng trở nên mượt mà và đáng tin cậy
   \end{itemize}
 \end{frame}
-
-\begin{frame}
-  \centering
-  \Huge Cảm ơn!
-\end{frame}
-
 \end{document}
