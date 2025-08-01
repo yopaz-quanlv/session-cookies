@@ -26,7 +26,6 @@ $username = $user_id && isset($users['by_id'][$user_id]) ? $users['by_id'][$user
       <?php endif; ?>
 
       <div style="margin-top: 20px;">
-
         <a href="dashboard.php"><button>Quay Về Dashboard</button></a>
       </div>
     </div>
