@@ -1,3 +1,13 @@
+<?php
+$users = require __DIR__ . '/../data/users.php';
+$user_id = $_COOKIE['user_id'] ?? null;
+
+if ($user_id && isset($users['by_id'][$user_id])) {
+    header('Location: dashboard.php');
+    exit;
+}
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
