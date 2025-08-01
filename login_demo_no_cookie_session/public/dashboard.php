@@ -26,14 +26,11 @@ $username = $users_by_id[$user_id];
 
       <hr style="margin: 20px 0;">
 
-      <h3>🧭 Các trang phụ (giữ trạng thái user bằng URL)</h3>
-      <a href="page1.php?user_id=<?php echo urlencode($user_id); ?>"><button>Trang 1 (giữ user)</button></a>
-      <div style="margin-top: 10px;">
-        <a href="page2.php?user_id=<?php echo urlencode($user_id); ?>"><button>Trang 2 (giữ user)</button></a>
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <a href="page1.php?user_id=<?php echo urlencode($user_id); ?>"><button style="background-color: orange;">Trang 1</button></a>
+        <a href="page2.php?user_id=<?php echo urlencode($user_id); ?>"><button style="background-color: orange;">Trang 2</button></a>
+        <a href="page3.php"><button style="background-color: orange;">Trang 3</button></a>
       </div>
-
-      <h3 style="margin-top: 25px;">⚠️ Mất trạng thái khi không giữ URL</h3>
-      <a href="page3.php"><button style="background-color: #e53e3e;">Trang 3 (mất user)</button></a>
 
       <div style="margin-top: 30px;">
         <a href="index.php"><button>Trang chủ</button></a>
