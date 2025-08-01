@@ -22,7 +22,9 @@ $username = $users_by_id[$user_id];
     <div class="login-form">
       <h2>Trang 2</h2>
       <p>Xin chào <strong><?php echo htmlspecialchars($username); ?></strong>, đây là nội dung trang 2.</p>
-      <a href="dashboard.php?user_id=<?php echo urlencode($user_id); ?>"><button>Quay về Dashboard</button></a>
+      <div style="margin-top: 20px;">
+        <a href="dashboard.php?user_id=<?php echo urlencode($user_id); ?>"><button>Quay về Dashboard</button></a>
+      </div>
     </div>
   </div>
 </body>

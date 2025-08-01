@@ -23,13 +23,17 @@ $username = $users['by_id'][$user_id];
       <h2>Xin chào, <?php echo htmlspecialchars($username); ?>!</h2>
       <p>Ghi nhớ đăng nhập bằng <strong>cookie</strong>.</p>
 
+      <hr style="margin: 20px 0;">
+
       <div style="display: flex; flex-direction: column; gap: 10px;">
         <a href="page1.php"><button style="background-color: orange;">Trang 1</button></a>
         <a href="page2.php"><button style="background-color: orange;">Trang 2</button></a>
         <a href="page3.php"><button style="background-color: orange;">Trang 3</button></a>
+      </div>
 
+      <div style="margin-top: 30px;">
         <a href="index.php"><button>Trang chủ</button></a>
-        <a href="logout.php"><button>Đăng xuất</button></a>
+        <a href="logout.php"><button style="margin-top: 10px;">Đăng xuất</button></a>
       </div>
     </div>
   </div>
